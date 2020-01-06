@@ -5,12 +5,12 @@ import {
     Button,
     withStyles,
     Container,
-    Grid
+    Grid,
+    Typography
 } from '@material-ui/core';
 
 import { withContext } from '../services/context';
 import PrintModal from '../components/PrintModal';
-import { startTimer } from '../services/utils';
 
 const styles = () => ({
     container: {
@@ -27,12 +27,13 @@ const PrintVoucher = ({
 }) => {
     const [open, setOpen] = useState(false);
     const [nextVoucher, setNextVoucher] = useState(null);
+
     useEffect(() => {
         const { vouchers } = context;
-        if(vouchers) {
+        if (vouchers) {
             setNextVoucher(vouchers.find(voucher => !voucher.counting));
         }
-    }, []);
+    }, [context]);
 
     const giveVoucher = () => {
         setOpen(true);
@@ -51,33 +52,49 @@ const PrintVoucher = ({
     return (
         <Layout>
             <Container className={classes.container}>
-                <Grid 
+                <Grid
                     container
                     direction="row"
                     justify="center"
                     alignItems="center"
                     style={{ height: "60vh" }}
                 >
-                    <Button 
+
+                    {
+                        (!context.vouchers ||
+                            context.vouchers.length === 0) &&
+                        <Typography variant="h6" component="p">
+                            Não tenho vouchers
+                        </Typography>
+                    }
+                    {
+                        context.vouchers &&
+                        context.vouchers.length <= 10 &&
+                        context.vouchers.length > 0 &&
+                        <Typography variant="h6" component="p" style={{ color: "red" }}>
+                            Já só tenho mais {context.vouchers.length} {context.vouchers.length === 1 ? "voucher" : "vouchers"}
+                        </Typography>
+                    }
+                    <Button
                         className={classes.button}
                         color="primary"
                         variant="contained"
                         size="large"
                         onClick={giveVoucher}
+                        disabled={!context.vouchers || context.vouchers.length === 0}
                     >
                         Imprimir
                     </Button>
-
-                {context.vouchers && <PrintModal 
-                    open={open}
-                    handleClose={handleClose}
-                    voucher={nextVoucher}
-                />}
+                    {context.vouchers && <PrintModal
+                        open={open}
+                        handleClose={handleClose}
+                        voucher={nextVoucher}
+                    />}
                 </Grid>
             </Container>
         </Layout>
     )
-} 
+}
 
 export default compose(
     withContext,

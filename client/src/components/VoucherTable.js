@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
     Paper,
     TableContainer,
@@ -11,12 +11,8 @@ import {
     IconButton,
     Tooltip
 } from '@material-ui/core';
-import moment from 'moment';
 import PrintIcon from '@material-ui/icons/Print';
-import TimerIcon from '@material-ui/icons/Timer';
-import TimerOffIcon from '@material-ui/icons/TimerOff';
-import Countdown from './Countdown';
-import { startTimer, stopTimer } from '../services/utils';
+import { startTimer } from '../services/utils';
 
 const VoucherTable = ({
     classes,
@@ -27,16 +23,28 @@ const VoucherTable = ({
     const [vouchers, setVouchers] = useState(rows);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
+    const startCounting = useCallback(
+        (voucher, index) => {
+            rows[index] = {
+                ...rows[index],
+                timeLeft: startTimer(voucher),
+                counting: true
+            }
+            setVouchers([...rows]);
+        },
+        [rows]
+    );
+
     useEffect(() => {
         setVouchers(rows);
-        console.log(rows);
-        if(rows)
+        if (rows)
             rows.map((row, index) => {
-                if(row.timeLeft.seconds !== 0 && row.timeLeft.minutes !== 0 && row.timeLeft.hours !== 0){
+                if (row.timeLeft.seconds !== 0 && row.timeLeft.minutes !== 0 && row.timeLeft.hours !== 0) {
                     startCounting(row, index);
                 }
+                return "";
             });
-    }, [rows])
+    }, [rows, startCounting]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -47,23 +55,14 @@ const VoucherTable = ({
         setPage(0);
     };
 
-    const startCounting = (voucher, index) => {
-        rows[index] = {
-            ...rows[index],
-            timeLeft: startTimer(voucher),
-            counting: true
-        }
-        setVouchers([...rows]);
-    }
-
-    const stopCounting = index => {
-        rows[index] = {
-            ...rows[index],
-            timeLeft: stopTimer(),
-            counting: false
-        }
-        setVouchers([...rows]);
-    }
+    // const stopCounting = index => {
+    //     rows[index] = {
+    //         ...rows[index],
+    //         timeLeft: stopTimer(),
+    //         counting: false
+    //     }
+    //     setVouchers([...rows]);
+    // }
 
     const renderTableBody = vouchers => {
         if (!vouchers) {

@@ -8,20 +8,31 @@ import {
     Grid,
     Typography
 } from '@material-ui/core';
+import trevo3Img from '../media/img/trevo3.jpg';
 import PrintIcon from '@material-ui/icons/Print';
 import ReactToPrint from 'react-to-print';
 
 const styles = {
     modalContainer: {
         width: "40vh",
-        height: "65vh"
+        height: "30vh"
     },
     modalContent: {
         height: "50%",
-        marginTop: "10vh"
+        marginTop: "5vh"
     },
     typography: {
         fontFamily: "'Courier Prime', monospace",
+    },
+    logo: {
+        width: "100px",
+        height: "100px",
+        margin: "auto"
+    },
+    logoGrid: {
+        width: "100%",
+        marginLeft: "calc(50% - 50px)",
+        marginTop: "20px"
     }
 };
 
@@ -34,15 +45,10 @@ class PrintContent extends React.Component {
                 container 
                 justify="center"
             >
-                <Grid item className={classes.modalContent}>
-                    <Typography 
-                        className={classes.typography}
-                        align="center" 
-                        variant="h6" 
-                        component="p"
-                    >
-                        Código
-                    </Typography>
+                <Grid item sm={12} className={classes.logoGrid}>
+                    <img src={trevo3Img} className={classes.logo} alt="logo" />
+                </Grid>
+                <Grid item sm={12} className={classes.modalContent}>
                     <Typography 
                         className={classes.typography}
                         align="center" 

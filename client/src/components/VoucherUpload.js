@@ -10,7 +10,6 @@ import CheckIcon from '@material-ui/icons/Check';
 import PublishIcon from '@material-ui/icons/Publish';
 
 import { api } from '../services/api';
-import { withContext } from '../services/context';
 
 const VoucherUpload = ({ classes, context }) => {
     const [csvFile, setCsvFile] = useState(null);
