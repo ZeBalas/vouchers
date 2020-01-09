@@ -11,6 +11,7 @@ import {
 
 import { withContext } from '../services/context';
 import PrintModal from '../components/PrintModal';
+import { api } from '../services/api';
 
 const styles = () => ({
     container: {
@@ -41,8 +42,9 @@ const PrintVoucher = ({
 
     const handleClose = () => {
         setOpen(false);
-        setTimeout(() => {
+        setTimeout(async () => {
             let { vouchers, dispatch } = context;
+            const response = await api.delete(`/give-voucher/${nextVoucher.code}`);
             vouchers = vouchers.filter(voucher => voucher.id !== nextVoucher.id);
             setNextVoucher(vouchers.find(voucher => !voucher.counting));
             dispatch({ type: "SET_VOUCHERS", payload: vouchers });

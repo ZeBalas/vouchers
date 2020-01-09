@@ -18,8 +18,8 @@ const styles = {
         height: "30vh"
     },
     modalContent: {
-        height: "50%",
-        marginTop: "5vh"
+        height: "100%",
+        marginTop: "1vh"
     },
     typography: {
         fontFamily: "'Courier Prime', monospace",
@@ -56,6 +56,13 @@ class PrintContent extends React.Component {
                         component="p"
                     >
                         { voucher.code }
+                    </Typography>
+                    <Typography 
+                        variant="subtitle1" 
+                        align="center"
+                        component="p"
+                    >
+                        Obrigado e volte sempre!
                     </Typography>
                 </Grid>
                 {/* <Grid item className={classes.modalContent}>

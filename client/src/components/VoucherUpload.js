@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Grid,
     Button,
@@ -17,6 +17,37 @@ const VoucherUpload = ({ classes, context }) => {
     const [success, setSuccess] = useState(false);
     const [errors, setErrors] = useState({});
 
+    useEffect(() => {
+        const loadVouchers = async () => {
+            const response = await getVouchers();
+            const vouchers = formatVouchers(response.data);
+            context.dispatch({
+                type: "SET_VOUCHERS",
+                payload: vouchers
+            })
+        }
+        loadVouchers();
+    }, [])
+
+    const getVouchers = async () => {
+        return await api.get("/vouchers");
+    }
+
+    const formatVouchers = data => {
+        return data.map((data, index) => {
+            return {
+                id: index,
+                ...data,
+                timeLeft: {
+                    seconds: 0,
+                    minutes: 0,
+                    hours: 0,
+                },
+                counting: false
+            }
+        });
+    }
+
     const handleSubmit = async e => {
         e.preventDefault();
         setUploading(true);
@@ -24,21 +55,10 @@ const VoucherUpload = ({ classes, context }) => {
         formData.append("file", csvFile);
         try {
             const response = await api.post("/upload-file", formData);
-            response.data = response.data.map((data, index) => {
-                return {
-                    id: index,
-                    ...data,
-                    timeLeft: {
-                        seconds: 0,
-                        minutes: 0,
-                        hours: 0,
-                    },
-                    counting: false
-                }
-            });
+            const vouchers = formatVouchers(response.data);
             context.dispatch({
                 type: "SET_VOUCHERS",
-                payload: response.data
+                payload: vouchers
             })
             if (response.status === 200)
                 setSuccess(true);
@@ -50,12 +70,10 @@ const VoucherUpload = ({ classes, context }) => {
 
     const handleChange = e => {
         const file = e.target.files[0];
-        if (file.type !== "text/csv")
-            setErrors({ file: "Tem de ser um ficheiro CSV" });
-        else {
-            setErrors({});
-            setCsvFile(file);
-        }
+
+        setErrors({});
+        setCsvFile(file);
+
     }
 
     return (
