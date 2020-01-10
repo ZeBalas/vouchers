@@ -27,7 +27,7 @@ const VoucherUpload = ({ classes, context }) => {
             })
         }
         loadVouchers();
-    }, [])
+    }, [context])
 
     const getVouchers = async () => {
         return await api.get("/vouchers");

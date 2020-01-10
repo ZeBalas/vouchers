@@ -34,7 +34,35 @@ const PrintVoucher = ({
         if (vouchers) {
             setNextVoucher(vouchers.find(voucher => !voucher.counting));
         }
+        const loadVouchers = async () => {
+            const response = await getVouchers();
+            const vouchers = formatVouchers(response.data);
+            context.dispatch({
+                type: "SET_VOUCHERS",
+                payload: vouchers
+            })
+        }
+        loadVouchers();
     }, [context]);
+
+    const getVouchers = async () => {
+        return await api.get("/vouchers");
+    }
+
+    const formatVouchers = data => {
+        return data.map((data, index) => {
+            return {
+                id: index,
+                ...data,
+                timeLeft: {
+                    seconds: 0,
+                    minutes: 0,
+                    hours: 0,
+                },
+                counting: false
+            }
+        });
+    }
 
     const giveVoucher = () => {
         setOpen(true);
@@ -44,7 +72,7 @@ const PrintVoucher = ({
         setOpen(false);
         setTimeout(async () => {
             let { vouchers, dispatch } = context;
-            const response = await api.delete(`/give-voucher/${nextVoucher.code}`);
+            await api.delete(`/give-voucher/${nextVoucher.code}`);
             vouchers = vouchers.filter(voucher => voucher.id !== nextVoucher.id);
             setNextVoucher(vouchers.find(voucher => !voucher.counting));
             dispatch({ type: "SET_VOUCHERS", payload: vouchers });

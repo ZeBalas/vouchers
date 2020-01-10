@@ -23,6 +23,7 @@ const styles = {
     },
     typography: {
         fontFamily: "'Courier Prime', monospace",
+        marginBottom: "100px"
     },
     logo: {
         width: "100px",
