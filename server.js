@@ -70,6 +70,13 @@ server.delete('/give-voucher/:code', (req, res) => {
         fs.writeFile("tmp/codes.txt", fileContent, err => console.log(err));
         res.send({ code, fileContent });
     });
+});
+
+server.delete("/vouchers", (req, res) => {
+    fs.writeFile("tmp/codes.txt", "", err => {
+        console.log(err);
+    });
+    res.send("all vouchers are deleted");
 })
 
 server.listen(process.env.PORT || port);

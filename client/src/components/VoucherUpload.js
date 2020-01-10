@@ -6,20 +6,19 @@ import {
     FormHelperText
 } from '@material-ui/core';
 import AttachmentIcon from '@material-ui/icons/Attachment';
-import CheckIcon from '@material-ui/icons/Check';
 import PublishIcon from '@material-ui/icons/Publish';
 
 import { api } from '../services/api';
+import { formatVouchers } from '../services/formatter';
 
 const VoucherUpload = ({ classes, context }) => {
     const [csvFile, setCsvFile] = useState(null);
     const [uploading, setUploading] = useState(false);
-    const [success, setSuccess] = useState(false);
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
         const loadVouchers = async () => {
-            const response = await getVouchers();
+            const response = await api.get("/vouchers");
             const vouchers = formatVouchers(response.data);
             context.dispatch({
                 type: "SET_VOUCHERS",
@@ -28,25 +27,6 @@ const VoucherUpload = ({ classes, context }) => {
         }
         loadVouchers();
     }, [context])
-
-    const getVouchers = async () => {
-        return await api.get("/vouchers");
-    }
-
-    const formatVouchers = data => {
-        return data.map((data, index) => {
-            return {
-                id: index,
-                ...data,
-                timeLeft: {
-                    seconds: 0,
-                    minutes: 0,
-                    hours: 0,
-                },
-                counting: false
-            }
-        });
-    }
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -61,7 +41,7 @@ const VoucherUpload = ({ classes, context }) => {
                 payload: vouchers
             })
             if (response.status === 200)
-                setSuccess(true);
+                setCsvFile(null);
         } catch (err) {
             setErrors({ file: "Houve um erro. Pergunta ao Torre" });
         }
@@ -92,34 +72,19 @@ const VoucherUpload = ({ classes, context }) => {
                     <FormHelperText className={classes.formHelperText}>
                         {errors.file}
                     </FormHelperText>
-                    {!success && (
-                        <label htmlFor="file">
-                            <Button
-                                style={{ color: csvFile && "green" }}
-                                component="span"
-                                size="small"
-                                className={classes.button}
-                            >
-                                Mete aqui o mambo
+                    <label htmlFor="file">
+                        <Button
+                            style={{ color: csvFile && "green" }}
+                            component="span"
+                            size="small"
+                            className={classes.button}
+                        >
+                            Mete aqui o mambo
                             <AttachmentIcon
-                                    className={classes.icon}
-                                />
-                            </Button>
-                        </label>
-                    )}
-                    {success && (
-                        <label>
-                            <Button
-                                style={{ color: "green" }}
-                                component="span"
-                                size="small"
-                                className={classes.button}
-                            >
-                                Já está
-                            <CheckIcon />
-                            </Button>
-                        </label>
-                    )}
+                                className={classes.icon}
+                            />
+                        </Button>
+                    </label>
                     <Button
                         variant="contained"
                         type="submit"

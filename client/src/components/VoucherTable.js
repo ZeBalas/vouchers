@@ -75,6 +75,16 @@ const VoucherTable = ({
             );
         }
 
+        if(vouchers.length === 0) {
+            return (
+                <TableRow>
+                    <TableCell colSpan={3}>
+                        Não tenho vouchers
+                    </TableCell>
+                </TableRow>
+            );
+        }
+
         return vouchers
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => {
