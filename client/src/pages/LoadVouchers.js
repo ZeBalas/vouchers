@@ -58,11 +58,12 @@ const LoadVouchers = ({
 
     const deleteVouchers = async () => {
         const response = await api.delete("/vouchers");
-        if (response.status === "200")
+        if (response.status === 200) {
             context.dispatch({
                 type: "SET_VOUCHERS",
                 payload: null
             })
+        }       
     }
 
     return (

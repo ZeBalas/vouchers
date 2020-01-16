@@ -26,7 +26,7 @@ const VoucherUpload = ({ classes, context }) => {
             })
         }
         loadVouchers();
-    }, [context])
+    }, [])
 
     const handleSubmit = async e => {
         e.preventDefault();

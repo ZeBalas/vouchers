@@ -31,20 +31,19 @@ const PrintVoucher = ({
     const [nextVoucher, setNextVoucher] = useState(null);
 
     useEffect(() => {
-        const { vouchers } = context;
-        if (vouchers) {
-            setNextVoucher(vouchers.find(voucher => !voucher.counting));
-        }
         const loadVouchers = async () => {
             const response = await api.get("/vouchers");
             const vouchers = formatVouchers(response.data);
+            if (vouchers) {
+                setNextVoucher(vouchers.find(voucher => !voucher.counting));
+            }
             context.dispatch({
                 type: "SET_VOUCHERS",
                 payload: vouchers
             })
         }
         loadVouchers();
-    }, [context]);
+    }, []);
 
     const giveVoucher = () => {
         setOpen(true);
