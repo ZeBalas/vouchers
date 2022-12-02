@@ -79,6 +79,7 @@ const LoadVouchers = ({
                     context={ context }
                 />
                 <Button 
+                    style={{ marginBottom: '10px' }}
                     variant="contained"
                     color="secondary"
                     onClick={() => setDeleteOpen(true)}
