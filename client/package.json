@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "react-scripts start",
-    "test": "echo no tests available"
+    "test": ""
   },
   "dependencies": {
     "@material-ui/core": "^4.8.0",
