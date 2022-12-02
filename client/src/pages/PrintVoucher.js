@@ -12,7 +12,6 @@ import {
 import { withContext } from '../services/context';
 import PrintModal from '../components/PrintModal';
 import { api } from '../services/api';
-import { formatVouchers } from '../services/formatter';
 
 const styles = () => ({
     container: {
@@ -33,17 +32,18 @@ const PrintVoucher = ({
     useEffect(() => {
         const loadVouchers = async () => {
             const response = await api.get("/vouchers");
-            const vouchers = formatVouchers(response.data);
-            if (vouchers) {
-                setNextVoucher(vouchers.find(voucher => !voucher.counting));
+            if (response.data) {
+                setNextVoucher(response.data.find(voucher => !voucher.counting));
             }
             context.dispatch({
                 type: "SET_VOUCHERS",
-                payload: vouchers
+                payload: response.data
             })
         }
         loadVouchers();
     }, []);
+
+    console.log("next voucher?", nextVoucher)
 
     const giveVoucher = () => {
         setOpen(true);
@@ -54,7 +54,7 @@ const PrintVoucher = ({
         setTimeout(async () => {
             let { vouchers, dispatch } = context;
             await api.delete(`/give-voucher/${nextVoucher.code}`);
-            vouchers = vouchers.filter(voucher => voucher.id !== nextVoucher.id);
+            vouchers = vouchers.filter(voucher => voucher._id !== nextVoucher._id);
             setNextVoucher(vouchers.find(voucher => !voucher.counting));
             dispatch({ type: "SET_VOUCHERS", payload: vouchers });
         }, 300)

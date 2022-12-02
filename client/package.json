@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "react-scripts start"
+    "start": "react-scripts start",
+    "test": "echo no tests available"
   },
   "dependencies": {
     "@material-ui/core": "^4.8.0",

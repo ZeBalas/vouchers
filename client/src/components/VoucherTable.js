@@ -39,7 +39,7 @@ const VoucherTable = ({
         setVouchers(rows);
         if (rows)
             rows.map((row, index) => {
-                if (row.timeLeft.seconds !== 0 && row.timeLeft.minutes !== 0 && row.timeLeft.hours !== 0) {
+                if (row.timeLeft?.seconds !== 0 && row.timeLeft?.minutes !== 0 && row.timeLeft?.hours !== 0) {
                     startCounting(row, index);
                 }
                 return "";
@@ -54,15 +54,6 @@ const VoucherTable = ({
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-
-    // const stopCounting = index => {
-    //     rows[index] = {
-    //         ...rows[index],
-    //         timeLeft: stopTimer(),
-    //         counting: false
-    //     }
-    //     setVouchers([...rows]);
-    // }
 
     const renderTableBody = vouchers => {
         if (!vouchers) {
@@ -93,12 +84,6 @@ const VoucherTable = ({
                         <TableCell>
                             {row.code}
                         </TableCell>
-                        {/* <TableCell>
-                            {row.expiresAt}
-                        </TableCell>
-                        <TableCell>
-                            <Countdown counting={row.counting} time={row.timeLeft} />
-                        </TableCell> */}
                         <TableCell>
                             <Tooltip title="Imprimir" placement="left">
                                 <IconButton
@@ -108,29 +93,6 @@ const VoucherTable = ({
                                     <PrintIcon />
                                 </IconButton>
                             </Tooltip>
-                            {/* {
-                                row.timeLeft.seconds === 0 &&
-                                row.timeLeft.minutes === 0 &&
-                                row.timeLeft.hours === 0 ? (
-                                    <Tooltip title="Começar" placement="right">
-                                        <IconButton
-                                            className={classes.startButton}
-                                            onClick={() => startCounting(row, index)}
-                                        >
-                                            <TimerIcon />
-                                        </IconButton>
-                                    </Tooltip>
-                                ) : (
-                                    <Tooltip title="Parar" placement="right">
-                                        <IconButton
-                                            className={classes.stopButton}
-                                            onClick={() => stopCounting(index)}
-                                        >
-                                            <TimerOffIcon />
-                                        </IconButton>
-                                    </Tooltip>
-                                )
-                            } */}
                         </TableCell>
                     </TableRow>
                 );
@@ -146,13 +108,7 @@ const VoucherTable = ({
                             <TableCell>
                                 Código
                             </TableCell>
-                            {/* <TableCell>
-                                Válido até
-                            </TableCell>
-                            <TableCell>
-                                Tempo restante
-                            </TableCell> */}
-                            {/* <TableCell align="right" /> */}
+                            <TableCell align="right" />
                         </TableRow>
                     </TableHead>
                     <TableBody>

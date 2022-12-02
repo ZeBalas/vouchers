@@ -9,7 +9,7 @@ import AttachmentIcon from '@material-ui/icons/Attachment';
 import PublishIcon from '@material-ui/icons/Publish';
 
 import { api } from '../services/api';
-import { formatVouchers } from '../services/formatter';
+// import { formatVouchers } from '../services/formatter';
 
 const VoucherUpload = ({ classes, context }) => {
     const [csvFile, setCsvFile] = useState(null);
@@ -19,10 +19,10 @@ const VoucherUpload = ({ classes, context }) => {
     useEffect(() => {
         const loadVouchers = async () => {
             const response = await api.get("/vouchers");
-            const vouchers = formatVouchers(response.data);
+            // const vouchers = formatVouchers(response.data);
             context.dispatch({
                 type: "SET_VOUCHERS",
-                payload: vouchers
+                payload: response.data
             })
         }
         loadVouchers();
@@ -35,10 +35,10 @@ const VoucherUpload = ({ classes, context }) => {
         formData.append("file", csvFile);
         try {
             const response = await api.post("/upload-file", formData);
-            const vouchers = formatVouchers(response.data);
+            // const vouchers = formatVouchers(response.data);
             context.dispatch({
                 type: "SET_VOUCHERS",
-                payload: vouchers
+                payload: response.data
             })
             if (response.status === 200)
                 setCsvFile(null);
